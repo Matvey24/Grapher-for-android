@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_grapher">Графер by Math_way</string>
+    <string name="nav_help">Помощь</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_resize">Масштаб</string>
+    <string name="nav_timer">Таймер</string>
+    <string name="graphics">Графики</string>
+    <string name="functions">Функции</string>
+    <string name="calculator">Счетчик</string>
+    <string name="update">Обновить</string>
+    <string name="converting">Парсинг..</string>
+    <string name="updater_errors_two_funcs">Нужны 2 функции в параметре и транслировании.</string>
+    <string name="updater_errors_params">Нужна переменная t или x и y в %d графике</string>
+    <string name="saved">сохранено</string>
+    <string name="loaded">загружено</string>
+    <string name="updater_errors_recursion">Слишком длинная \'goto\' рекурсия: длина</string>
+    <string name="updating">Пересчет..</string>
+    <string name="parser_errors_0">Непонятный сомвол \'%s\'</string>
+    <string name="parser_errors_1">%s в %s</string>
+    <string name="parser_errors_2">Слишком мало аргументов</string>
+    <string name="parser_errors_3">Слишком много аргументов</string>
+    <string name="parser_errors_4">Криво размещены(а) %s</string>
+    <string name="parser_errors_5">скобки</string>
+    <string name="parser_errors_6">Переменные и лямбды могут быть в $..$: \'%s\'</string>
+    <string name="calculator_errors_0">%s в \'%s\' %s</string>
+    <string name="calculator_errors_1">%s в калькуляторе</string>
+    <string name="calculator_errors_2">%s в грамматике \'%s\' %s</string>
+    <string name="calculator_errors_3">графике</string>
+    <string name="calculator_errors_4">функции</string>
+    <string name="calculator_errors_5">Слишком много переменнных</string>
+    <string name="calculator_errors_6">константе</string>
+</resources>

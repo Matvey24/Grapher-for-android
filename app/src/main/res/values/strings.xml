@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name" translatable="false">Grapher for android</string>
+
+    <string name="menu_grapher">Grapher by Math_way</string>
+    <string name="nav_help">Help</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_resize">Resize</string>
+    <string name="nav_timer">Timer</string>
+    <string name="graphics">Graphics</string>
+    <string name="functions">Functions</string>
+    <string name="calculator">Calculator</string>
+    <string name="update">Update</string>
+    <string name="plus" translatable="false">+</string>
+    <string name="minus" translatable="false">-</string>
+    <string name="converting">Converting..</string>
+    <string name="updater_errors_two_funcs">We need 2 funcs in parametric and translation.</string>
+    <string name="updater_errors_params">We need t or x and y vars in %d graphic</string>
+    <string name="saved">saved</string>
+    <string name="loaded">loaded</string>
+    <string name="updater_errors_recursion">Too long \'goto\' recursion: len</string>
+    <string name="updating">Updating..</string>
+    <string name="parser_errors_0">Undefined symbol \'%s\'</string>
+    <string name="parser_errors_1">%s in %s</string>
+    <string name="parser_errors_2">Too little arguments</string>
+    <string name="parser_errors_3">Too many arguments</string>
+    <string name="parser_errors_4">Bad location of %s</string>
+    <string name="parser_errors_5">brackets</string>
+    <string name="parser_errors_6">Only vars and lambdas can be in $..$: \'%s\'</string>
+    <string name="calculator_errors_0">%s in \'%s\' %s</string>
+    <string name="calculator_errors_1">%s in calculator</string>
+    <string name="calculator_errors_2">%s in grammar of \'%s\' %s</string>
+    <string name="calculator_errors_3">graphic</string>
+    <string name="calculator_errors_4">function</string>
+    <string name="calculator_errors_5">Too many vars</string>
+    <string name="calculator_errors_6">constant</string>
+
+</resources>
