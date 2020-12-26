@@ -5,6 +5,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.UiThread;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.FuncVariable;
@@ -66,6 +69,6 @@ public class CalculatorView {
     }
 
     public void setText(String s) {
-        field.setText(s);
+        activity.runOnUiThread(()->field.setText(s));
     }
 }

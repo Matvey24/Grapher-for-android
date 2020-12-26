@@ -6,11 +6,14 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
 
 public class FunctionsView {
     private final EditText area;
-    public FunctionsView(AppCompatActivity main, Runnable update){
+    private final MainActivity activity;
+    public FunctionsView(MainActivity main, Runnable update){
+        this.activity = main;
         area = main.findViewById(R.id.functions_area);
         Button btn_update = main.findViewById(R.id.btn_update);
         btn_update.setOnClickListener((view)->{
@@ -22,6 +25,6 @@ public class FunctionsView {
         return (e == null) ? "" : e.toString();
     }
     public void setText(String text){
-        area.setText(text);
+        activity.runOnUiThread(()->area.setText(text));
     }
 }

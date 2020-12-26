@@ -82,7 +82,7 @@ public class TimerSettings {
     }
 
     private String getTimerText(boolean selected) {
-        return activity.getResources().getString(R.string.nav_timer) + (selected ? " I" : " O");
+        return activity.getResources().getString(R.string.nav_timer) + (selected ? " I" : " 0");
     }
 
     private void update_text() {
@@ -207,6 +207,7 @@ public class TimerSettings {
         if (arr.length > 2)
             try {
                 mod = Boolean.parseBoolean(arr[2]);
+                btn_change_mod.setChecked(mod);
             }catch (RuntimeException ignored){}
     }
 }

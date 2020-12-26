@@ -45,7 +45,7 @@ public class GraphicsAdapter extends RecyclerView.Adapter<TextElementView> {
     }
 
     public void update(){
-        updater.getMain().runInMain(this::notifyDataSetChanged);
+        updater.getMain().runOnUiThread(this::notifyDataSetChanged);
     }
 
     private void openSettings(int idx){

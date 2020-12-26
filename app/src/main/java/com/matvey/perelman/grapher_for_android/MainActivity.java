@@ -46,20 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MainModel.createInstance(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder()
-                .setOpenableLayout(drawer)
-                .build();
-
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
         Button btn_help = findViewById(R.id.btn_help);
         btn_help.setOnClickListener((v) -> {
             open_helper(0);
@@ -87,17 +73,28 @@ public class MainActivity extends AppCompatActivity {
 
         mainSettings = new MainSettings(this, updater);
 
-        updater.dangerState = true;
         loadEmergencySave();
+        updater.dangerState = true;
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder()
+                .setOpenableLayout(drawer)
+                .build();
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
     }
 
     private void functionsRecalculate() {
         updater.now_show_graphics = true;
         recalculate();
-    }
-
-    public void runInMain(Runnable r){
-        drawer.post(r);
     }
 
     public void recalculate() {
@@ -118,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setState(String text) {
-        state.post(() -> state.setText(text));
+        runOnUiThread(() -> state.setText(text));
     }
 
     public void open_helper(int help_id) {
@@ -134,10 +131,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadEmergencySave() {
-        File f = getFileToEmergencySave();
-        if (f.exists()) {
-            updater.load(f, false);
-        }
+        try {
+            File f = getFileToEmergencySave();
+            if (f.exists()) {
+                updater.load(f, false);
+            }
+        }catch (RuntimeException ignored){}
     }
     public void rollback(){
         File f = getFileToEmergencySave();
