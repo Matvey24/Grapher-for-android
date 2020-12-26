@@ -1,12 +1,11 @@
 package com.matvey.perelman.grapher_for_android.ui.elements;
 
 import android.text.Editable;
-import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.FuncVariable;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.LambdaContainer;
@@ -14,20 +13,22 @@ import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.
 
 public class CalculatorView {
     private final TextView answer;
+    private final MainActivity activity;
     private final EditText field;
     private Expression<Double> func;
     private final StringBuilder sb;
     @SuppressWarnings("unchecked")
     private final FuncVariable<Double>[] var = new FuncVariable[1];
 
-    public CalculatorView(AppCompatActivity main, Runnable calculate) {
+    public CalculatorView(MainActivity main, Runnable calculate) {
+        this.activity = main;
         answer = main.findViewById(R.id.calculator_answer);
         field = main.findViewById(R.id.calculator_field);
         sb = new StringBuilder();
-        field.setOnKeyListener((view, key, event)->{
-            if(event.getAction() == KeyEvent.ACTION_DOWN && key == KeyEvent.KEYCODE_ENTER)
-                calculate.run();
-            return false;
+        field.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        field.setOnEditorActionListener((view, act, ev) -> {
+            calculate.run();
+            return true;
         });
         var[0] = new FuncVariable<>();
     }
@@ -56,7 +57,7 @@ public class CalculatorView {
     }
 
     private void setAnswer(String text) {
-        answer.post(()->answer.setText(text));
+        answer.postOnAnimation(() -> answer.setText(text));
     }
 
     public String getText() {

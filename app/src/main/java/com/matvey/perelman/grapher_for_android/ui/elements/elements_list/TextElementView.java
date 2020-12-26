@@ -1,7 +1,7 @@
 package com.matvey.perelman.grapher_for_android.ui.elements.elements_list;
 
-import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,34 +28,37 @@ public class TextElementView extends RecyclerView.ViewHolder {
             settings_listener.onClick(index);
             return true;
         });
-        text.setOnKeyListener((view, a, b) -> {
-            if ((a == KeyEvent.KEYCODE_ENTER || a == KeyEvent.KEYCODE_NAVIGATE_NEXT) && b.getAction() == KeyEvent.ACTION_DOWN) {
-                text_changed.onClick(index);
-                return true;
-            }
-            return false;
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        text.setOnEditorActionListener((view, act, ev) -> {
+            text_changed.onClick(index);
+            return true;
         });
     }
-    public void onDetach(){
+
+    public void onDetach() {
         data.setText(text());
     }
-    public void setTextFromFile(String text, TextElement e){
-        if(e == data)
+
+    public void setTextFromFile(String text, TextElement e) {
+        if (e == data)
             this.text.setText(text);
     }
-    private String text(){
-        if(text.getText() == null)
+
+    private String text() {
+        if (text.getText() == null)
             return "";
         else
             return text.getText().toString();
     }
-    public String getText(TextElement asker){
-        if(data == asker){
+
+    public String getText(TextElement asker) {
+        if (data == asker) {
             return text();
-        }else{
+        } else {
             return null;
         }
     }
+
     public void set(int index, TextElement element) {
         this.index = index;
         this.data = element;

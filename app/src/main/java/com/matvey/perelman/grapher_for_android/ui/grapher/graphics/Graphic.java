@@ -10,7 +10,7 @@ import com.matvey.perelman.grapher_for_android.model.GraphType;
 
 public abstract class Graphic {
     public static int FUNCTION_MAP_SIZE = 100;
-    public static int PARAMETRIC_MAP_SIZE = 100;
+    public static int PARAMETRIC_MAP_SIZE = 500;
     public static int IMPLICIT_MAP_SIZE = 200;
     public static int TRANSLATION_MAP_SIZE = 100;
     public GraphType type;

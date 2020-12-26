@@ -8,6 +8,7 @@ import com.matvey.perelman.grapher_for_android.calculator2.calculator.Parser;
 import com.matvey.perelman.grapher_for_android.model.FullModel;
 import com.matvey.perelman.grapher_for_android.ui.elements.CalculatorView;
 import com.matvey.perelman.grapher_for_android.ui.elements.FunctionsView;
+import com.matvey.perelman.grapher_for_android.ui.elements.MainSettings;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.GraphicsAdapter;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.TextElement;
 import com.matvey.perelman.grapher_for_android.ui.grapher.CoordinateSystem;
@@ -40,7 +41,7 @@ public class ModelUpdater {
     private static final List<String> func_names = Arrays.asList("f", "g", "i", "j", "l", "m", "n", "o", "bl");
     private final Calculator calculator;
     //    private final SupportFrameManager supportFrameManager;
-    private final MainActivity main;
+    private MainActivity main;
     private final DataBase dataBase;
     public static int HEIGHT;
     public static int GRAPH_WIDTH;
@@ -66,9 +67,11 @@ public class ModelUpdater {
         elements = new ArrayList<>();
         coordinateSystem = new CoordinateSystem();
         calculator = new Calculator(this, activity, this::resize);
-//        supportFrameManager = new SupportFrameManager(this);
     }
-
+    public void setMain(MainActivity activity){
+        this.main = activity;
+        calculator.setMain(activity);
+    }
     void add(String func, String params) {
         String[] arr = params.split("\\n");
         String name;
@@ -320,10 +323,6 @@ public class ModelUpdater {
         calculator.runResize();
     }
 
-    public void openTimer() {
-//        supportFrameManager.openTimerSettings();
-    }
-
     public void timerResize() {
         calculator.timerResize();
     }
@@ -401,16 +400,8 @@ public class ModelUpdater {
         }
     }
 
-
-    //    public SupportFrameManager getSupportFrameManager() {
-//        return supportFrameManager;
-//    }
     public void setTime(double time) {
         calculator.resetConstant("tm", time);
-    }
-
-    public void setTimerName(String name) {
-        main.setTimerName(name);
     }
 
     public CoordinateSystem getCoordinateSystem() {
@@ -482,7 +473,15 @@ public class ModelUpdater {
             g.resize(offsetX, offsetY, scaleX, scaleY);
     }
 
-    public void clear() {
+    public void clearFully(){
+        clear();
+        calculator.getCalculatorView().setText("");
+        calculator.getFunctionsView().setText("");
+        list.notifyDataSetChanged();
+        recalculate();
+    }
+
+    private void clear() {
         for (int i = elements.size() - 1; i >= 0; --i) {
             remove(i, false);
         }
@@ -493,12 +492,9 @@ public class ModelUpdater {
         calculator.makeModel(m);
 
         m.view_params = getLookAtX() + "\n" + getLookAtY() + "\n" + scaleX + "\n" + scaleY;
+        m.resize_idx = "0";
+
         main.makeModel(m);
-//        supportFrameManager.getTimer().makeModel(m);
-//        supportFrameManager.getMainSettings().makeModel(m);
-        m.timer_info = "";
-        m.main_settings = "";
-        m.resize_idx = "";
 
         setState(dataBase.save(m, f, main));
         last_used_file = f;
@@ -507,13 +503,13 @@ public class ModelUpdater {
     public void load(File f, boolean needRecalculate) {
         try {
             last_used_file = null;
-//            supportFrameManager.getTimer().stop();
             FullModel m = dataBase.load(f);
             clear();
-//            supportFrameManager.close();
             calculator.fromModel(m);
-            if (needRecalculate)
-                list.notifyDataSetChanged();
+            main.fromModel(m);
+            if (needRecalculate) {
+                list.update();
+            }
             if (!m.view_params.isEmpty()) {
                 String[] view_params = m.view_params.split("\n");
                 scaleX = Double.parseDouble(view_params[2]);
@@ -525,9 +521,6 @@ public class ModelUpdater {
                     lookAtY(lookY);
                 }
             }
-//            main.fromModel(m);
-//            supportFrameManager.getTimer().fromModel(m);
-//            supportFrameManager.getMainSettings().fromModel(m);
             last_used_file = f;
             if (needRecalculate) {
                 calculator.recalculate();

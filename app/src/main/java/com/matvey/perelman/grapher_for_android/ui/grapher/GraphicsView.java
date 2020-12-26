@@ -9,7 +9,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.matvey.perelman.grapher_for_android.R;
-import com.matvey.perelman.grapher_for_android.controller.MainModel;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 import com.matvey.perelman.grapher_for_android.ui.grapher.graphics.Graphic;
 

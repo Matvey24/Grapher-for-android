@@ -11,7 +11,6 @@
     <string name="calculator">Calculator</string>
     <string name="update">Update</string>
     <string name="plus" translatable="false">+</string>
-    <string name="minus" translatable="false">-</string>
     <string name="converting">Converting..</string>
     <string name="updater_errors_two_funcs">We need 2 funcs in parametric and translation.</string>
     <string name="updater_errors_params">We need t or x and y vars in %d graphic</string>
@@ -33,5 +32,17 @@
     <string name="calculator_errors_4">function</string>
     <string name="calculator_errors_5">Too many vars</string>
     <string name="calculator_errors_6">constant</string>
+    <string name="timer_dur_fps">Seconds : FPS,</string>
+    <string name="dimension">Dimension from : to</string>
+    <string name="timer_boomerang_off">Jump</string>
+    <string name="timer_boomerang_on">Boomerang</string>
+    <string name="simple_error">Couldn\'t understand input</string>
+    <string name="clear">Clear</string>
+    <string name="rollback">Rollback</string>
+    <string name="net_width">Net width</string>
+    <string name="load">Load project</string>
+    <string name="save">Save project</string>
+    <string name="quick_save">Quick save</string>
+    <string name="minus" translatable="false">←</string>
 
 </resources>

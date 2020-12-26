@@ -26,7 +26,7 @@ public class CoordinateSystem {
     public int MAX_LINES;
 
     public CoordinateSystem() {
-        MIN_DELTA = 160;
+        MIN_DELTA = 150;
         MAX_DELTA = MIN_DELTA * 5 / 2;
         maxDeltaY = MAX_DELTA * 4 / 5;
         maxDeltaX = MAX_DELTA * 4 / 5;
@@ -56,8 +56,6 @@ public class CoordinateSystem {
         MAX_DELTA = MIN_DELTA * 5 / 2;
         maxDeltaY = MAX_DELTA * 4 / 5;
         maxDeltaX = MAX_DELTA * 4 / 5;
-        setMAX_LINES();
-        resizeNet();
     }
 
     private void setMAX_LINES() {

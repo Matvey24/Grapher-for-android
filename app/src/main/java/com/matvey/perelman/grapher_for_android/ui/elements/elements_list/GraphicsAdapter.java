@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.matvey.perelman.grapher_for_android.R;
-import com.matvey.perelman.grapher_for_android.controller.MainModel;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 
 public class GraphicsAdapter extends RecyclerView.Adapter<TextElementView> {
@@ -42,6 +42,10 @@ public class GraphicsAdapter extends RecyclerView.Adapter<TextElementView> {
     private void onRemove(int idx){
         updater.remove(idx, true);
         notifyDataSetChanged();
+    }
+
+    public void update(){
+        updater.getMain().runInMain(this::notifyDataSetChanged);
     }
 
     private void openSettings(int idx){

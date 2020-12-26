@@ -1,7 +1,5 @@
 package com.matvey.perelman.grapher_for_android.controller;
 
-import android.util.Log;
-
 import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
 import com.matvey.perelman.grapher_for_android.calculator2.ArrayCalculator;
@@ -34,7 +32,7 @@ public class Calculator {
     private BoolAsk repaint;
     private final Tasks tasks;
     private final Runnable resize;
-    private final MainActivity main;
+    private MainActivity main;
     private FunctionsView functionsView;
     private CalculatorView calculatorView;
     private List<Variable<Double>> params;
@@ -48,6 +46,9 @@ public class Calculator {
         this.main = main;
         makeParams();
         calculator = new ArrayCalculator<>();
+    }
+    public void setMain(MainActivity activity){
+        this.main = activity;
     }
     public void setRepaint(BoolAsk repaint){
         this.repaint = repaint;
@@ -189,7 +190,7 @@ public class Calculator {
                         ++funcs;
                     }
                 }
-//                resetConstant("tm", updater.getSupportFrameManager().getTime());
+                resetConstant("tm", updater.getMain().getTime());
                 updateConstants();
                 calculatorView.update();
                 updater.setState(getString(R.string.updating));
@@ -394,6 +395,14 @@ public class Calculator {
         n.addFunction("getMouseY", (a)->updater.getMouseY(), 0, 10);
         this.goto_len = gotoDefLen;
         return n;
+    }
+
+    public FunctionsView getFunctionsView() {
+        return functionsView;
+    }
+
+    public CalculatorView getCalculatorView() {
+        return calculatorView;
     }
 
     void makeModel(FullModel m) {

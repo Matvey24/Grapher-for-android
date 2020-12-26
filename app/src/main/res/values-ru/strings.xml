@@ -30,4 +30,15 @@
     <string name="calculator_errors_4">функции</string>
     <string name="calculator_errors_5">Слишком много переменнных</string>
     <string name="calculator_errors_6">константе</string>
+    <string name="timer_dur_fps">Секунды : ФПС</string>
+    <string name="dimension">Диапазон от : до</string>
+    <string name="timer_boomerang_off">Прыжок</string>
+    <string name="timer_boomerang_on">Бумеранг</string>
+    <string name="simple_error">Невозможно разпознать ввод</string>
+    <string name="clear">Очистить</string>
+    <string name="rollback">Откатить</string>
+    <string name="net_width">Ширина сетки</string>
+    <string name="load">Загрузить</string>
+    <string name="save">Сохранить</string>
+    <string name="quick_save">Быстрое сохранение</string>
 </resources>
