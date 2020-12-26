@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.FuncVariable;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.actors.Expression;
 import com.matvey.perelman.grapher_for_android.model.GraphType;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.GRAPH_WIDTH;
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.HEIGHT;
@@ -51,7 +52,10 @@ public class Parametric extends Graphic {
 
     @Override
     public void paint(Canvas g, Paint p) {
-        p.setColor(color);
+        if(MainModel.dark_theme)
+            p.setColor(color ^ 0x00ffffff);
+        else
+            p.setColor(color);
         for (int i = 0; i < MAP_SIZE-1; ++i) {
             if (Double.isNaN(map[i] + map[i + 1] + xMap[i] + xMap[i + 1])
                     || ((map[i] - map[i + 1]) * (map[i] - map[i + 1]) * scaleY * scaleY + (xMap[i] - xMap[i + 1]) * (xMap[i] - xMap[i + 1]) * scaleX * scaleX)

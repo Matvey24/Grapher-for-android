@@ -45,20 +45,30 @@ public class MainSettings {
         btn_quick_save.setOnClickListener((view)->activity.quickSave());
     }
     private String getNetWidthString(){
-        return String.valueOf(updater.getCoordinateSystem().getMinDelta());
+        return (updater.draw_coordinates?"":"-") + updater.getCoordinateSystem().getMinDelta();
     }
     private void open_settings(){
         et_net_width.setText(getNetWidthString());
         settings_dialog.show();
     }
+    private void parseWidth(String text){
+        boolean show_net = true;
+        String s = text.replaceAll("[ \t\r]", "");
+        if(s.startsWith("-")){
+            show_net = false;
+            s = s.substring(1);
+        }
+        int width = Integer.parseInt(s);
+        if(width < 10){
+            throw new RuntimeException(width + " < 10");
+        }
+        updater.draw_coordinates = show_net;
+        updater.getCoordinateSystem().setMIN_DELTA(width);
+    }
     private boolean update_net_width(){
         boolean good = true;
         try {
-            int width = Integer.parseInt(DNEditor.getText(et_net_width));
-            if(width < 10){
-                throw new RuntimeException(width + " < 10");
-            }
-            updater.getCoordinateSystem().setMIN_DELTA(width);
+            parseWidth(DNEditor.getText(et_net_width));
             updater.runResize();
         }catch (RuntimeException e){
             et_net_width.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
@@ -74,7 +84,8 @@ public class MainSettings {
         fm.main_settings = getNetWidthString();
     }
     public void fromModel(FullModel fm){
-        int width = Integer.parseInt(fm.main_settings);
-        updater.getCoordinateSystem().setMIN_DELTA(width);
+        try {
+            parseWidth(fm.main_settings);
+        }catch (RuntimeException ignored){}
     }
 }

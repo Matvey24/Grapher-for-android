@@ -23,12 +23,13 @@ public class GraphicsView extends View {
     private final GestureDetector gd;
     private final int background;
     private final ArrayList<Graphic> graphics;
-    public boolean draw_coordinates = true;
     public boolean painting;
 
     public float mouseX, mouseY;
     public boolean isMousePressed;
     public boolean sizeUpdated;
+
+    public boolean view_movable;
     public GraphicsView(Context context) {
         super(context);
         this.updater = MainModel.getInstance().updater;
@@ -42,6 +43,8 @@ public class GraphicsView extends View {
             public boolean onScale(ScaleGestureDetector detector) {
                 mouseX = detector.getFocusX();
                 mouseY = detector.getFocusY();
+                if(!view_movable)
+                    return false;
                 updater.rescale(detector.getScaleFactor(), mouseX, mouseY, 0);
                 return true;
             }
@@ -51,6 +54,8 @@ public class GraphicsView extends View {
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 mouseX = e2.getX();
                 mouseY = e2.getY();
+                if(!view_movable)
+                    return false;
                 updater.translate(-distanceX, -distanceY);
                 return true;
             }
@@ -94,7 +99,7 @@ public class GraphicsView extends View {
         paint.setColor(background);
         canvas.drawPaint(paint);
         paint.setTextSize(30);
-        if (draw_coordinates)
+        if (updater.draw_coordinates)
             cs.draw(canvas, paint);
         for (int i = 0; i < graphics.size(); ++i)
             graphics.get(i).paint(canvas, paint);

@@ -12,6 +12,7 @@ import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.actors.BinaryActor;
 import com.matvey.perelman.grapher_for_android.model.BoolAsk;
 import com.matvey.perelman.grapher_for_android.model.GraphType;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.GRAPH_WIDTH;
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.HEIGHT;
@@ -165,8 +166,11 @@ public class Implicit extends Graphic {
     }
 
     public void setC() {
-        if (type == INEQUALITY)
+        if (type == INEQUALITY) {
             c = Color.argb(130, Color.red(color), Color.green(color), Color.blue(color));
+        }
+        if(MainModel.dark_theme)
+            c = c ^ 0x00ffffff;
     }
 
     public void setSensitivity(double sensitivity) {

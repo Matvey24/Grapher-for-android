@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.matvey.perelman.grapher_for_android.model.BoolAsk;
 import com.matvey.perelman.grapher_for_android.model.GraphType;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.GRAPH_WIDTH;
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.HEIGHT;
@@ -55,7 +56,10 @@ public class Function extends Graphic {
 
     @Override
     public void paint(Canvas g, Paint p) {
-        p.setColor(color);
+        if(MainModel.dark_theme)
+            p.setColor(color ^ 0x00ffffff);
+        else
+            p.setColor(color);
         if (abscissa) {
             for (int i = 0; i < MAP_SIZE - 1; ++i) {
                 if (Double.isNaN(map[i]) || Double.isNaN(map[i + 1]) || Math.abs(map[i] - map[i + 1]) * scaleY > MAX_DELTA)

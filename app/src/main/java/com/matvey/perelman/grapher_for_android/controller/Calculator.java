@@ -61,7 +61,7 @@ public class Calculator {
         tasks.runTask(() -> {
             try {
                 updater.setState(getString(R.string.converting));
-//                updater.getMainPanel().view_movable = true;
+                updater.graphicsView.view_movable = true;
                 List<String> graphs = new ArrayList<>();
                 List<String> calc = new ArrayList<>();
                 calc.add(calculatorView.getText());
@@ -368,18 +368,18 @@ public class Calculator {
             }
         };
         params.add(goto_len);
-//        Variable<Double> mouse = new Variable<Double>("view_movable", null){
-//            @Override
-//            public void setValue(Double value) {
-//                updater.getMainPanel().view_movable = value != 0;
-//            }
-//
-//            @Override
-//            public Double calculate() {
-//                return updater.getMainPanel().view_movable?1d:0d;
-//            }
-//        };
-//        params.add(mouse);
+        Variable<Double> view_movable = new Variable<Double>("view_movable", null){
+            @Override
+            public void setValue(Double value) {
+                updater.graphicsView.view_movable = value != 0;
+            }
+
+            @Override
+            public Double calculate() {
+                return updater.graphicsView.view_movable?1d:0d;
+            }
+        };
+        params.add(view_movable);
     }
     private Number makeNumber() {
         Number n = new Number();

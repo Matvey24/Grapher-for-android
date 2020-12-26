@@ -57,7 +57,7 @@ public class ModelUpdater {
     public boolean dangerState = true;
     public File last_used_file;
     public boolean now_show_graphics;
-
+    public boolean draw_coordinates = true;
     public ModelUpdater(MainActivity activity) {
         this.main = activity;
         dataBase = new DataBase();
@@ -224,7 +224,9 @@ public class ModelUpdater {
                 break;
         }
     }
-
+    public void runInBackground(Runnable r){
+        calculator.run(r);
+    }
     private int findFreeId() {
         for (int i = 0; i < func_names.size() - 1; ++i) {
             String name = func_names.get(i);

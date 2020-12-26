@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.matvey.perelman.grapher_for_android.R;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 
 public class TextElementView extends RecyclerView.ViewHolder {
     private final TextView name;
@@ -64,13 +65,17 @@ public class TextElementView extends RecyclerView.ViewHolder {
         this.data = element;
         element.tev = this;
         name.setText(element.name);
-        name.setTextColor(element.color);
+        setColor(element.color, element);
         text.setText(element.text());
     }
 
     public void setColor(int color, TextElement e) {
-        if (e == data)
-            name.setTextColor(color);
+        if (e == data) {
+            if(MainModel.dark_theme)
+                name.setTextColor(color ^ 0x00ffffff);
+            else
+                name.setTextColor(color);
+        }
     }
 
     public void setName(String name, TextElement e) {

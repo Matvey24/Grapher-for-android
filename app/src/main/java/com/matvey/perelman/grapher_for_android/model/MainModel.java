@@ -4,9 +4,12 @@ import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.CalcLanguage;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
+import com.matvey.perelman.grapher_for_android.ui.elements.HelperView;
+import com.matvey.perelman.grapher_for_android.ui.helper.HelperFragment;
 
 public class MainModel {
     private static MainModel mm;
+    public static boolean dark_theme;
     public static void createInstance(MainActivity activity){
         if(mm == null)
             mm = new MainModel(activity);
@@ -20,7 +23,7 @@ public class MainModel {
 
     public static final int GRAPHICS = 1;
     public static final int HELPER = 2;
-
+    public HelperFragment helperFragment;
     public int openedWindow;
     private MainModel(MainActivity activity){
         updater = new ModelUpdater(activity);
@@ -43,6 +46,9 @@ public class MainModel {
                 activity.getString(R.string.parser_errors_6),
         };
     }
+    public static String[][][] fullArray;
+    public static boolean log_loaded;
+    public static int selected_array;
 
     public final ModelUpdater updater;
 

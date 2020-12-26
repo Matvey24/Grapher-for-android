@@ -36,8 +36,8 @@ public abstract class DefaultSettings {
 
         btn_feels_time = d.findViewById(R.id.btn_feels_time);
         btn_set_color = d.findViewById(R.id.btn_set_color);
-
         btn_feels_time.setOnClickListener((view)->feelsTimeChecked());
+
     }
     private void feelsTimeChecked(){
         getGraphic().feelsTime = btn_feels_time.isChecked();

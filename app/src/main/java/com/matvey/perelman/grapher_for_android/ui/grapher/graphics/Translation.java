@@ -7,6 +7,7 @@ import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.actors.Expression;
 import com.matvey.perelman.grapher_for_android.model.BoolAsk;
 import com.matvey.perelman.grapher_for_android.model.GraphType;
+import com.matvey.perelman.grapher_for_android.model.MainModel;
 import com.matvey.perelman.grapher_for_android.ui.grapher.CoordinateSystem;
 
 import static com.matvey.perelman.grapher_for_android.controller.ModelUpdater.GRAPH_WIDTH;
@@ -113,7 +114,10 @@ public class Translation extends Graphic {
 
     @Override
     public void paint(Canvas g, Paint p) {
-        p.setColor(color);
+        if(MainModel.dark_theme)
+            p.setColor(color ^ 0x00ffffff);
+        else
+            p.setColor(color);
         for (int n = 0; n < endY; ++n) {
             double[] map = dataY[n];
             double[] xMap = dataX[n];

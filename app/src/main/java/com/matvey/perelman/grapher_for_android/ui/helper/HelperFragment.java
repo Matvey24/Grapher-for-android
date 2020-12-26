@@ -29,10 +29,13 @@ public class HelperFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rv.setAdapter(adapter);
         MainModel.getInstance().openedWindow = MainModel.HELPER;
+        MainModel.getInstance().helperFragment = this;
         setText();
     }
+
     public void setText(){
-        adapter.strs = new String[][]{{"My grapher:", "the best", "unreal"}, {"My knowledge of android:", "the best"}, {"My graphers:", "For PC\nFor Android"}};
+        int idx = MainModel.selected_array;
+        adapter.strs = MainModel.fullArray[idx];
         adapter.notifyDataSetChanged();
     }
 }
