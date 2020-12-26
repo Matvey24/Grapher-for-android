@@ -8,7 +8,6 @@ import com.matvey.perelman.grapher_for_android.calculator2.calculator.Parser;
 import com.matvey.perelman.grapher_for_android.model.FullModel;
 import com.matvey.perelman.grapher_for_android.ui.elements.CalculatorView;
 import com.matvey.perelman.grapher_for_android.ui.elements.FunctionsView;
-import com.matvey.perelman.grapher_for_android.ui.elements.MainSettings;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.GraphicsAdapter;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.TextElement;
 import com.matvey.perelman.grapher_for_android.ui.grapher.CoordinateSystem;
@@ -50,7 +49,6 @@ public class ModelUpdater {
     private final CoordinateSystem coordinateSystem;
     public GraphicsAdapter list;
     public GraphicsView graphicsView;
-    private Graphic lOG;
     private double offsetX = -3;
     private double offsetY = 5.5;
     private double scaleX = 100;
@@ -68,10 +66,12 @@ public class ModelUpdater {
         coordinateSystem = new CoordinateSystem();
         calculator = new Calculator(this, activity, this::resize);
     }
-    public void setMain(MainActivity activity){
+
+    public void setMain(MainActivity activity) {
         this.main = activity;
         calculator.setMain(activity);
     }
+
     void add(String func, String params) {
         String[] arr = params.split("\\n");
         String name;
@@ -126,24 +126,19 @@ public class ModelUpdater {
         gr.name = name;
         e.color = color;
         e.setTextFromFile(func);
+        setFuncName(gr, name, e);
         switch (type) {
-            case "Function":
-                e.name = name + "(x)";
-                break;
             case "Parametric":
-                e.name = "xy(t)";
                 String startEnd = arr[4];
                 String[] st = startEnd.split(":");
                 ((Parametric) gr).updateBoards(Double.parseDouble(st[0]), Double.parseDouble(st[1]));
                 break;
             case "Implicit":
-                e.name = name + "(xy)";
                 ((Implicit) gr).setSensitivity(Double.parseDouble(arr[4]));
                 if (arr.length > 5)
                     ((Implicit) gr).setViewType(Integer.parseInt(arr[5]));
                 break;
             case "Translation":
-                e.name = "Tran";
                 ((Translation) gr).setMultiplyer(Integer.parseInt(arr[4]));
                 gr.setMAP_SIZE(gr.MAP_SIZE);
                 break;
@@ -163,104 +158,71 @@ public class ModelUpdater {
     }
 
     public void remove(int idx, boolean need_update) {
-        //            supportFrameManager.close();
-//        int lo = start_make(idx);
         graphics.remove(idx);
         elements.remove(idx);
-//        if (lo == idx) {
-//            supportFrameManager.close();
-//        }
         if (need_update)
             calculator.recalculate();
     }
 
-    public void run(Runnable r) {
-        calculator.run(r);
-    }
-
     public void startSettings(int id) {
         Graphic g = graphics.get(id);
-//        if (g instanceof Function) {
-//            supportFrameManager.openFunctionSettings((Function) g, list.getElements().get(id));
-//        } else if (g instanceof Parametric) {
-//            supportFrameManager.openParameterSettings((Parametric) g, list.getElements().get(id));
-//        } else if (g instanceof Implicit) {
-//            supportFrameManager.openImplicitSettings((Implicit) g, list.getElements().get(id));
-//        } else if (g instanceof Translation) {
-//            supportFrameManager.openTranslationSettings((Translation) g, list.getElements().get(id));
-//        }
-        lOG = g;
+        main.startSettings(g, elements.get(id));
     }
 
     public void makeFunction(int idx, TextElement e) {
         Graphic g = graphics.get(idx);
         Function function = new Function(Graphic.FUNCTION_MAP_SIZE, g.feelsTime);
-        int lo = start_make(idx);
         function.setColor(g);
         graphics.set(idx, function);
         int id = func_names.indexOf(g.name);
         setFuncName(function, func_names.get(id), e);
         function.name = g.name;
-        checkClosed(idx, lo);
     }
 
     public void makeParametric(int idx, TextElement e) {
         Graphic g = graphics.get(idx);
         Parametric parametric = new Parametric(Graphic.PARAMETRIC_MAP_SIZE, g.feelsTime);
-        int lo = start_make(idx);
         parametric.setColor(g);
         graphics.set(idx, parametric);
         setFuncName(parametric, null, e);
         parametric.name = g.name;
-        checkClosed(idx, lo);
     }
 
     public void makeImplicit(int idx, TextElement e) {
         Graphic g = graphics.get(idx);
         Implicit implicit = new Implicit(this::isMousePressed, Graphic.IMPLICIT_MAP_SIZE, g.feelsTime);
-        int lo = start_make(idx);
         implicit.setColor(g);
         graphics.set(idx, implicit);
         int id = func_names.indexOf(g.name);
         setFuncName(implicit, func_names.get(id), e);
         implicit.name = g.name;
-        checkClosed(idx, lo);
     }
 
     public void makeTranslation(int idx, TextElement e) {
         Graphic g = graphics.get(idx);
         Translation translation = new Translation(this::isMousePressed, getCoordinateSystem(), Graphic.TRANSLATION_MAP_SIZE, g.feelsTime);
         translation.setMAP_SIZE(translation.MAP_SIZE);
-        int lo = start_make(idx);
         translation.setColor(g);
         graphics.set(idx, translation);
         setFuncName(translation, null, e);
         translation.name = g.name;
-        checkClosed(idx, lo);
     }
 
     private void setFuncName(Graphic g, String name, TextElement e) {
-        if (g instanceof Function) {
-            e.setName(name + "(x)");
-        } else if (g instanceof Parametric) {
-            e.setName("xy(t)");
-        } else if (g instanceof Implicit) {
-            e.setName(name + "(xy)");
-        } else if (g instanceof Translation) {
-            e.setName("Tran");
+        switch (g.type) {
+            case FUNCTION:
+                e.setName(name + "(x)");
+                break;
+            case PARAMETRIC:
+                e.setName("xy(t)");
+                break;
+            case IMPLICIT:
+                e.setName(name + "(xy)");
+                break;
+            case TRANSLATION:
+                e.setName("Tran");
+                break;
         }
-    }
-
-    private int start_make(int idx) {
-        int id = graphics.indexOf(lOG);
-        graphics.get(idx).free();
-        return id;
-    }
-
-    private void checkClosed(int idx, int lo) {
-//        if (supportFrameManager.isOpenedGraphic() && idx == lo) {
-//            startSettings(idx);
-//        }
     }
 
     private int findFreeId() {
@@ -338,14 +300,6 @@ public class ModelUpdater {
 
     public void findEndOf(Parser.StringToken line) {
         calculator.findEndOf(line);
-    }
-
-    public double getOffsetX() {
-        return offsetX;
-    }
-
-    public double getOffsetY() {
-        return offsetY;
     }
 
     public double getScaleX() {
@@ -447,13 +401,14 @@ public class ModelUpdater {
         return main;
     }
 
-    //    public void quick_save(boolean save){
-//        if(last_used_file != null){
+//    public void quick_save(boolean save) {
+//        if (last_used_file != null) {
 //            dosave(save, last_used_file);
-//        }else{
+//        } else {
 //            supportFrameManager.openFileChooser(save);
 //        }
 //    }
+
     public void setGraphicsView(GraphicsView gv) {
         this.graphicsView = gv;
         calculator.setRepaint(gv::myrepaint);
@@ -473,7 +428,7 @@ public class ModelUpdater {
             g.resize(offsetX, offsetY, scaleX, scaleY);
     }
 
-    public void clearFully(){
+    public void clearFully() {
         clear();
         calculator.getCalculatorView().setText("");
         calculator.getFunctionsView().setText("");

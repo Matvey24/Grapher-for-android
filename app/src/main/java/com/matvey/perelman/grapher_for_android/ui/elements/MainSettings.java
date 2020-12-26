@@ -7,6 +7,7 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputEditText;
 import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
+import com.matvey.perelman.grapher_for_android.controller.DNEditor;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 import com.matvey.perelman.grapher_for_android.model.FullModel;
 
@@ -53,8 +54,12 @@ public class MainSettings {
     private boolean update_net_width(){
         boolean good = true;
         try {
-            int width = Integer.parseInt(MainActivity.getFromEditText(et_net_width));
+            int width = Integer.parseInt(DNEditor.getText(et_net_width));
+            if(width < 10){
+                throw new RuntimeException(width + " < 10");
+            }
             updater.getCoordinateSystem().setMIN_DELTA(width);
+            updater.runResize();
         }catch (RuntimeException e){
             et_net_width.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
             good = false;

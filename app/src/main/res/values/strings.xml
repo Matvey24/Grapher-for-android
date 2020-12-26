@@ -44,5 +44,18 @@
     <string name="save">Save project</string>
     <string name="quick_save">Quick save</string>
     <string name="minus" translatable="false">←</string>
+    <string name="discretization">Discretization</string>
+    <string name="set_color">Set Color</string>
+    <string name="update_on_ask">Update on ask</string>
+    <string name="feels_time">Feels time</string>
+    <string name="function">Function</string>
+    <string name="parametric">Parametric</string>
+    <string name="implicit">Implicit</string>
+    <string name="translation">Translation</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="save_picture">Save picture</string>
+    <string name="infrared_imager">Infrared imager</string>
+    <string name="rainbow">Rainbow</string>
+    <string name="lines_per_cell">Lines per cell</string>
 
 </resources>

@@ -1,13 +1,12 @@
 package com.matvey.perelman.grapher_for_android.ui.elements;
 
 import android.app.Dialog;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
+import com.matvey.perelman.grapher_for_android.controller.DNEditor;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 import com.matvey.perelman.grapher_for_android.controller.MyTimer;
 import com.matvey.perelman.grapher_for_android.model.FullModel;
@@ -21,8 +20,8 @@ public class TimerSettings {
     private final Button btn_open_timer;
     private final ToggleButton btn_start_timer;
     private final ToggleButton btn_change_mod;
-    private final TextInputEditText et_duration_fps;
-    private final TextInputEditText et_dimension;
+    private final DNEditor duration_fps;
+    private final DNEditor dimension;
     private final MyTimer timer;
 
     private double duration = 20;
@@ -46,10 +45,10 @@ public class TimerSettings {
 
         btn_start_timer = timer_dialog.findViewById(R.id.timer_btn_start);
         btn_change_mod = timer_dialog.findViewById(R.id.timer_btn_boomerang);
-        et_duration_fps = timer_dialog.findViewById(R.id.timer_dur_fps);
-        et_dimension = timer_dialog.findViewById(R.id.timer_dimension);
-        et_duration_fps.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        et_dimension.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        duration_fps = new DNEditor(timer_dialog.findViewById(R.id.timer_dur_fps));
+        dimension = new DNEditor(timer_dialog.findViewById(R.id.timer_dimension));
+
         btn_start_timer.setOnClickListener((view) -> btnStart());
         btn_change_mod.setOnClickListener((view) -> mod = btn_change_mod.isChecked());
 
@@ -58,14 +57,8 @@ public class TimerSettings {
             btnStart();
             return true;
         });
-        et_duration_fps.setOnEditorActionListener((v, actionId, event) -> {
-            update_text();
-            return true;
-        });
-        et_dimension.setOnEditorActionListener((v, actionId, event) -> {
-            update_text();
-            return true;
-        });
+        duration_fps.setListener(this::update_text);
+        dimension.setListener(this::update_text);
         timer = new MyTimer(this::timer_iteration);
         setFPS(60);
         value = this.start;
@@ -88,15 +81,15 @@ public class TimerSettings {
     private void update_text() {
         boolean good = true;
         try {
-            parseDurationFPS(MainActivity.getFromEditText(et_duration_fps));
+            parseDurationFPS(duration_fps.getText());
         } catch (RuntimeException e) {
-            et_duration_fps.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
+            duration_fps.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
             good = false;
         }
         try {
-            parseDimension(MainActivity.getFromEditText(et_dimension));
+            parseDimension(dimension.getText());
         } catch (RuntimeException e) {
-            et_dimension.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
+            dimension.setError(activity.getString(R.string.simple_error) + ": " + e.getMessage());
             good = false;
         }
         if (good) {
@@ -105,15 +98,13 @@ public class TimerSettings {
     }
 
     private void parseDurationFPS(String text) {
-        int idx = text.indexOf(":");
-        String duration = text.substring(0, idx).replaceAll("[ \t\r]", "");
-        double dur = Double.parseDouble(duration);
-        if(dur < 0){
+        duration_fps.parseString(text);
+
+        double dur = duration_fps.getA();
+        if(dur < 0)
             throw new RuntimeException(dur + " < 0");
-        }
         this.duration = dur;
-        String fps = text.substring(idx + 1).replaceAll("[ \t\r]", "");
-        double fp = Double.parseDouble(fps);
+        double fp = duration_fps.getB();
         if(fp <= 0){
             throw new RuntimeException(fp + " <= 0");
         }else if(fp > 3000){
@@ -123,13 +114,10 @@ public class TimerSettings {
     }
 
     private void parseDimension(String text) {
-        int idx = text.indexOf(":");
-        String start = text.substring(0, idx).replaceAll("[ \t\r]", "");
-        this.start = Double.parseDouble(start);
-        String end = text.substring(idx + 1).replaceAll("[ \t\r]", "");
-        this.end = Double.parseDouble(end);
-        time = 0;
-        value = this.start;
+        dimension.parseString(text);
+        start = dimension.getA();
+        value = start;
+        end = dimension.getB();
     }
 
     private void setFPS(double fps) {
@@ -161,24 +149,14 @@ public class TimerSettings {
         }
         updater.timerResize();
     }
-
-    private String getDuration_FPS_String() {
-        return duration + " : " + fps;
-    }
-
-    private String getDimensionString() {
-        return start + " : " + end;
-    }
-
     public void stopTimer() {
         btn_start_timer.setChecked(false);
         btnStart();
     }
 
     private void show_dialog() {
-        et_duration_fps.setText(getDuration_FPS_String());
-
-        et_dimension.setText(getDimensionString());
+        duration_fps.set(duration, fps);
+        dimension.set(start, end);
 
         timer_dialog.show();
     }
@@ -188,7 +166,7 @@ public class TimerSettings {
     }
 
     public void makeModel(FullModel m) {
-        m.timer_info = getDuration_FPS_String() + "\n" + getDimensionString() + "\n" + mod;
+        m.timer_info = DNEditor.makeString(duration, fps) + "\n" + DNEditor.makeString(start, end) + "\n" + mod;
     }
 
     public void fromModel(FullModel m) {

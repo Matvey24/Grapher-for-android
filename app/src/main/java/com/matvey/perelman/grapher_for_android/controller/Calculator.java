@@ -113,7 +113,8 @@ public class Calculator {
                             if (!(g instanceof Translation)) {
                                 updater.makeTranslation(i, updater.elements.get(i));
                                 g = updater.graphics.get(i);
-                            }
+                            }else
+                                g.type = GraphType.TRANSLATION;
                             Expression<Double> funcX = calculator.getExpressions().get(parameters + 1);
                             Expression<Double> funcY = calculator.getExpressions().get(parameters + 2);
                             g.update(funcX, varAX);
@@ -130,7 +131,8 @@ public class Calculator {
                             if (!(g instanceof Parametric)) {
                                 updater.makeParametric(i, updater.elements.get(i));
                                 g = updater.graphics.get(i);
-                            }
+                            }else
+                                g.type = GraphType.PARAMETRIC;
                             g.update(funcY, varY);
                             ((Parametric) g).updateX(funcX, varX);
                         }
@@ -141,7 +143,8 @@ public class Calculator {
                             if (!(g instanceof Implicit)) {
                                 updater.makeImplicit(i, updater.elements.get(i));
                                 g = updater.graphics.get(i);
-                            }
+                            }else
+                                g.type = GraphType.IMPLICIT;
                             Expression<Double> func = calculator.getGraphics().get(funcs);
                             if (vars.size() > 2)
                                 throw new RuntimeException(String.format(getString(R.string.updater_errors_params), i));
@@ -169,7 +172,8 @@ public class Calculator {
                             if (!(g instanceof Function)) {
                                 updater.makeFunction(i, updater.elements.get(i));
                                 g = updater.graphics.get(i);
-                            }
+                            }else
+                                g.type = GraphType.FUNCTION;
                             Function f = (Function) g;
                             if (vars.size() == 0) {
                                 FuncVariable<Double> var = new FuncVariable<>();
@@ -254,6 +258,8 @@ public class Calculator {
         if(!updater.dangerState) {
             tasks.runTask(() -> {
                 try {
+                    if (updater.graphicsView.painting)
+                        return;
                     updateConstants();
                     for (Graphic g : updater.graphics)
                         g.timeChanged();

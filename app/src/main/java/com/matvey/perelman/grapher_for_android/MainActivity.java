@@ -1,11 +1,9 @@
 package com.matvey.perelman.grapher_for_android;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -17,6 +15,13 @@ import com.matvey.perelman.grapher_for_android.ui.elements.FunctionsView;
 import com.matvey.perelman.grapher_for_android.ui.elements.MainSettings;
 import com.matvey.perelman.grapher_for_android.ui.elements.TimerSettings;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.GraphicsAdapter;
+import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.TextElement;
+import com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings.DefaultSettings;
+import com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings.FunctionSettings;
+import com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings.ImplicitSettings;
+import com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings.ParametricSettings;
+import com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings.TranslationSettings;
+import com.matvey.perelman.grapher_for_android.ui.grapher.graphics.Graphic;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private MainSettings mainSettings;
 
     private TextView state;
+
+    private DefaultSettings[] settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +79,15 @@ public class MainActivity extends AppCompatActivity {
         timerSettings.stopTimer();
 
         mainSettings = new MainSettings(this, updater);
+        settings = new DefaultSettings[4];
+        settings[0] = new FunctionSettings(this, updater);
+        settings[1] = new ParametricSettings(this, updater);
+        settings[2] = new ImplicitSettings(this, updater);
+        settings[3] = new TranslationSettings(this, updater);
 
         loadEmergencySave();
         updater.dangerState = true;
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -157,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
         timerSettings.stopTimer();
     }
 
+    public void startSettings(Graphic g, TextElement e){
+        settings[g.type.ordinal()].startSettings(g, e);
+    }
+
     public double getTime() {
         return timerSettings.getTime();
     }
@@ -182,13 +199,5 @@ public class MainActivity extends AppCompatActivity {
     public void fromModel(FullModel m) {
         timerSettings.fromModel(m);
         mainSettings.fromModel(m);
-    }
-
-    public static String getFromEditText(EditText text) {
-        Editable e = text.getText();
-        if (e == null) {
-            return "";
-        }
-        return e.toString();
     }
 }

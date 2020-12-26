@@ -1,6 +1,7 @@
 package com.matvey.perelman.grapher_for_android.ui.elements;
 
 import android.text.Editable;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -19,6 +20,7 @@ public class FunctionsView {
         btn_update.setOnClickListener((view)->{
             update.run();
         });
+        area.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
     public String getText() {
         Editable e = area.getText();

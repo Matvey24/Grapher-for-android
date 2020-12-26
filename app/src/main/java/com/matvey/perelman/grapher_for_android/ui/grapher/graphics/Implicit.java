@@ -81,7 +81,7 @@ public class Implicit extends Graphic {
                     for (int j = 0; j < yMAP_SIZE; ++j) {
                         var.setValue(offsetX + i * deltaX);
                         yVar.setValue(offsetY - j * deltaY);
-                        tmp[0] = (float) ((360 * 5f / 6) * (1 - 1 / (1 + Math.exp(-func.calculate() * sensitivity))));
+                        tmp[0] = (float) ((360 * 5f / 6) * (1 / (1 + Math.exp(-func.calculate() * sensitivity))));
                         data1.setPixel(i, j, Color.HSVToColor(0xb6, tmp));
                     }
                 }

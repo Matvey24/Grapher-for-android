@@ -41,4 +41,17 @@
     <string name="load">Загрузить</string>
     <string name="save">Сохранить</string>
     <string name="quick_save">Быстрое сохранение</string>
+    <string name="discretization">Дискретизация</string>
+    <string name="feels_time">Чувтсвует время</string>
+    <string name="set_color">Цвет</string>
+    <string name="update_on_ask">Обновлять по запросу</string>
+    <string name="function">Функция</string>
+    <string name="parametric">Параметрическое</string>
+    <string name="implicit">Неявное задание</string>
+    <string name="translation">Транслирование</string>
+    <string name="sensitivity">Чувствительность</string>
+    <string name="save_picture">Сохранить картинку</string>
+    <string name="infrared_imager">Тепловизор</string>
+    <string name="rainbow">Радуга</string>
+    <string name="lines_per_cell">Линий в клетке</string>
 </resources>
