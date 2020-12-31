@@ -29,7 +29,7 @@ public class GraphicsView extends View {
     public boolean isMousePressed;
     public boolean sizeUpdated;
 
-    public boolean view_movable;
+    public boolean view_movable = true;
     public GraphicsView(Context context) {
         super(context);
         this.updater = MainModel.getInstance().updater;
@@ -68,6 +68,8 @@ public class GraphicsView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
+            mouseX = event.getX();
+            mouseY = event.getY();
             isMousePressed = true;
         }else if(event.getAction() == MotionEvent.ACTION_UP){
             isMousePressed = false;

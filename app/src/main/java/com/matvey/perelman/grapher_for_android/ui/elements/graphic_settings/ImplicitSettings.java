@@ -1,6 +1,10 @@
 package com.matvey.perelman.grapher_for_android.ui.elements.graphic_settings;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Environment;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -13,6 +17,9 @@ import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 import com.matvey.perelman.grapher_for_android.ui.elements.elements_list.TextElement;
 import com.matvey.perelman.grapher_for_android.ui.grapher.graphics.Graphic;
 import com.matvey.perelman.grapher_for_android.ui.grapher.graphics.Implicit;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class ImplicitSettings extends DefaultSettings {
     private Implicit implicit;
@@ -66,6 +73,14 @@ public class ImplicitSettings extends DefaultSettings {
                 fullScan();
                 return true;
             });
+
+            btn_save_picture.setOnClickListener((view)->{
+                if(Build.VERSION.SDK_INT >= 23){
+                    activity.requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, MainActivity.REQUEST_SAVE_PICTURE);
+                }else{
+                    save_picture();
+                }
+            });
             onCreateDialog(dialog);
         }
         et_sensitivity.setText(String.valueOf(implicit.getSensitivity()));
@@ -78,5 +93,20 @@ public class ImplicitSettings extends DefaultSettings {
                 break;
         }
         show();
+    }
+    public void save_picture(){
+        activity.runInBackground(()-> {
+            try {
+                Bitmap bitmap = implicit.getData1();
+                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "img.jpg");
+                FileOutputStream fos = new FileOutputStream(f);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+                activity.setState(activity.getString(R.string.saved) + " img.jpg");
+            } catch (Exception ex) {
+                activity.setState(ex.toString());
+            }
+            implicit.updateAfterSave();
+        });
     }
 }

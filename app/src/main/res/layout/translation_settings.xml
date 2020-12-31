@@ -51,6 +51,7 @@
             android:id="@+id/et_lines_per_cell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/lines_per_cell" />
+            android:hint="@string/lines_per_cell"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

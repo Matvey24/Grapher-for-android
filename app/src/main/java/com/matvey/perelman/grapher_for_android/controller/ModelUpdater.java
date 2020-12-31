@@ -1,6 +1,7 @@
 package com.matvey.perelman.grapher_for_android.controller;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.matvey.perelman.grapher_for_android.MainActivity;
 import com.matvey.perelman.grapher_for_android.R;
@@ -442,6 +443,8 @@ public class ModelUpdater {
         for (int i = elements.size() - 1; i >= 0; --i) {
             remove(i, false);
         }
+        graphics.clear();
+        elements.clear();
     }
 
     public void save(File f) {

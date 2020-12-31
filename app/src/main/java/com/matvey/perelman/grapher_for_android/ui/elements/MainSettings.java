@@ -41,8 +41,8 @@ public class MainSettings {
         btn_open_settings.setOnClickListener((view)->open_settings());
         et_net_width.setOnEditorActionListener((a, b, c)->update_net_width());
         btn_clear.setOnClickListener((view)->updater.clearFully());
-        btn_rollback.setOnClickListener((view)->activity.rollback());
-        btn_quick_save.setOnClickListener((view)->activity.quickSave());
+        btn_rollback.setOnClickListener((view)->activity.getSaveController().rollback());
+        btn_quick_save.setOnClickListener((view)->activity.getSaveController().quick_save());
     }
     private String getNetWidthString(){
         return (updater.draw_coordinates?"":"-") + updater.getCoordinateSystem().getMinDelta();

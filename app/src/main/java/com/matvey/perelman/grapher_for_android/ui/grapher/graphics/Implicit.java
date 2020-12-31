@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.FuncVariable;
 import com.matvey.perelman.grapher_for_android.calculator2.calculator.executors.actors.BinaryActor;
@@ -143,7 +142,27 @@ public class Implicit extends Graphic {
         }
         return data1;
     }
-
+    public void updateAfterSave(){
+        int val = 0xffffffff;
+        switch (type){
+            case EQUALITY:
+                val = 0xffffffff;
+                break;
+            case INEQUALITY:
+                val = 0x82ffffff;
+                break;
+            case SPECTRUM:
+                val = 0xb6ffffff;
+                break;
+        }
+        for (int i = 0; i < data1.getWidth(); ++i) {
+            for (int j = 0; j < data1.getHeight(); ++j) {
+                if (data1.getPixel(i, j) >> 24 != 0) {
+                    data1.setPixel(i, j, data1.getPixel(i, j) & val);
+                }
+            }
+        }
+    }
     @Override
     public void paint(Canvas g, Paint p) {
         matrix.setScale((float)(cSX / scaleX * GRAPH_WIDTH / data1.getWidth()), (float)(cSY / scaleY * HEIGHT / data1.getHeight()));
@@ -167,7 +186,7 @@ public class Implicit extends Graphic {
 
     public void setC() {
         if (type == INEQUALITY) {
-            c = Color.argb(130, Color.red(color), Color.green(color), Color.blue(color));
+            c = Color.argb(0x82, Color.red(color), Color.green(color), Color.blue(color));
         }
         if(MainModel.dark_theme)
             c = c ^ 0x00ffffff;

@@ -4,13 +4,15 @@ import android.Manifest;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.matvey.perelman.grapher_for_android.controller.SaveController;
 import com.matvey.perelman.grapher_for_android.model.MainModel;
 import com.matvey.perelman.grapher_for_android.controller.ModelUpdater;
 import com.matvey.perelman.grapher_for_android.model.FullModel;
@@ -30,7 +32,6 @@ import com.matvey.perelman.grapher_for_android.ui.grapher.graphics.Graphic;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.PermissionChecker;
-import androidx.core.content.pm.PermissionInfoCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,16 +42,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.net.URI;
 import java.net.URL;
-import java.security.Permission;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_LOAD_LOG = 234523;
+    public static final int REQUEST_LOAD_PROJECT = 44443;
+    public static final int REQUEST_SAVE_PICTURE = 124789;
+
+
     private ModelUpdater updater;
     private DrawerLayout drawer;
     private NavController navController;
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private MainSettings mainSettings;
 
     private DefaultSettings[] settings;
+
+    private SaveController saveController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         GraphicsAdapter graphics = new GraphicsAdapter();
         rv.setAdapter(graphics);
+
         updater = MainModel.getInstance().updater;
         FunctionsView fv = new FunctionsView(this, this::functionsRecalculate);
         CalculatorView cv = new CalculatorView(this, this::recalculate);
@@ -95,16 +100,18 @@ public class MainActivity extends AppCompatActivity {
         settings[2] = new ImplicitSettings(this, updater);
         settings[3] = new TranslationSettings(this, updater);
 
+        saveController = new SaveController(this, updater);
+
         MainModel.dark_theme =
                 (getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK)
+                        & Configuration.UI_MODE_NIGHT_MASK)
                         == Configuration.UI_MODE_NIGHT_YES;
 
-        HelperView helperView = new HelperView(this);
+        new HelperView(this);
 
-        loadEmergencySave();
+        saveController.onCreate(getIntent());
+
         updater.dangerState = true;
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,14 +126,15 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
     }
 
     private void functionsRecalculate() {
         updater.now_show_graphics = true;
         recalculate();
     }
-
+    public SaveController getSaveController(){
+        return saveController;
+    }
     public void recalculate() {
         hideKeyboard(getCurrentFocus());
         updater.recalculate();
@@ -149,59 +157,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void open_helper() {
-        runOnUiThread(()-> {
+        runOnUiThread(() -> {
             drawer.close();
             if (MainModel.getInstance().openedWindow == MainModel.GRAPHICS) {
                 navController.navigate(R.id.action_nav_grapher_to_nav_helper);
-            }else{
+            } else {
                 MainModel.getInstance().helperFragment.setText();
             }
         });
     }
 
-    private File getFileToEmergencySave() {
-        return new File(getFilesDir(), "emergency_save.gr");
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timerSettings.stopTimer();
     }
 
-    private void loadEmergencySave() {
-        try {
-            File f = getFileToEmergencySave();
-            if (f.exists()) {
-                updater.load(f, false);
-            }
-        }catch (RuntimeException ignored){}
-    }
-    public void rollback(){
-        File f = getFileToEmergencySave();
-        if(f.exists()){
-            updater.dosave(false, f);
-        }else{
-            updater.clearFully();
-        }
-    }
-    public void quickSave(){
-        File f = getFileToEmergencySave();
-        updater.dosave(true, f);
-    }
     @Override
     protected void onStop() {
         super.onStop();
-        updater.save(getFileToEmergencySave());
-        timerSettings.stopTimer();
+        saveController.onStop();
     }
-    public void stopTimer(){
-        timerSettings.stopTimer();
-    }
-    public void startSettings(Graphic g, TextElement e){
+
+    public void startSettings(Graphic g, TextElement e) {
         settings[g.type.ordinal()].startSettings(g, e);
+    }
+
+    public void stopTimer() {
+        timerSettings.stopTimer();
     }
 
     public double getTime() {
         return timerSettings.getTime();
     }
-    public void runInBackground(Runnable r){
+
+    public void runInBackground(Runnable r) {
         updater.runInBackground(r);
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         if (drawer.isOpen()) {
@@ -224,27 +217,36 @@ public class MainActivity extends AppCompatActivity {
         timerSettings.fromModel(m);
         mainSettings.fromModel(m);
     }
-    public void loadLog(){
-        if(Build.VERSION.SDK_INT >= 23){
-            requestPermissions(new String[]{Manifest.permission.INTERNET}, 234523);
-        }else{
-            updater.runInBackground(this::load);
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 234523){
-            if(grantResults[0] == PermissionChecker.PERMISSION_GRANTED){
-                updater.runInBackground(this::load);
-            }else{
-                setState(getString(R.string.permission_internet));
-            }
+        switch (requestCode) {
+            case REQUEST_LOAD_LOG:
+                if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+                    updater.runInBackground(this::mainLoadLog);
+                } else {
+                    setState(getString(R.string.permission_internet));
+                }
+                break;
+            case REQUEST_LOAD_PROJECT:
+                saveController.onLoadProjectPermissionGranted();
+                break;
+            case REQUEST_SAVE_PICTURE:
+                ((ImplicitSettings) settings[2]).save_picture();
+                break;
         }
     }
 
-    private void load(){
+    public void loadLog() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_LOAD_LOG);
+        } else {
+            updater.runInBackground(this::mainLoadLog);
+        }
+    }
+
+    private void mainLoadLog() {
         setState(getString(R.string.loading_log));
         try {
             URL url = new URL("https://github.com/Matvey24/Grapher/raw/master/out/artifacts/Grapher_jar/VersionLog.xml");
@@ -254,14 +256,14 @@ public class MainActivity extends AppCompatActivity {
             String[] arr = names.toArray(new String[]{});
             Arrays.sort(arr, String::compareTo);
             String[][] log = new String[arr.length][];
-            for(int i = 0; i < arr.length; ++i){
+            for (int i = 0; i < arr.length; ++i) {
                 String text = arr[i];
                 log[names.size() - i - 1] = properties.getProperty(text).split("\\n");
             }
             MainModel.fullArray[3] = log;
             MainModel.log_loaded = true;
             open_helper();
-        }catch (Exception e){
+        } catch (Exception e) {
             setState(e.toString());
         }
         setState(getString(R.string.plus));

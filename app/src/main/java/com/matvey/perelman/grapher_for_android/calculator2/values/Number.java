@@ -159,7 +159,7 @@ public class Number extends AbstractType<Double> {
                 return 0d;
             List<Double> l;
             if(idx >= array.size()){
-                for(int i = 0; i < idx - array.size(); ++i)
+                while(idx != array.size())
                     array.add(new ArrayList<>());
                 l = new ArrayList<>();
                 array.add(l);
@@ -171,7 +171,7 @@ public class Number extends AbstractType<Double> {
                 return 0d;
             double val = a[2].calculate();
             if(idx >= l.size()){
-                for(int i = 0; i < idx - l.size(); ++i)
+                while(idx != l.size())
                     l.add(0d);
                 l.add(val);
             }else

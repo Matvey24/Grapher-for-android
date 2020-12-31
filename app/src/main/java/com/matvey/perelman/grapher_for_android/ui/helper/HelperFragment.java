@@ -35,7 +35,6 @@ public class HelperFragment extends Fragment {
 
     public void setText(){
         int idx = MainModel.selected_array;
-        adapter.strs = MainModel.fullArray[idx];
-        adapter.notifyDataSetChanged();
+        adapter.resetContent(MainModel.fullArray[idx]);
     }
 }

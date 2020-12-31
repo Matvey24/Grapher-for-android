@@ -43,6 +43,7 @@ public class HelperView {
     private void openHelperFragment(int type){
         MainModel.selected_array = type;
         dialog.dismiss();
+        activity.stopTimer();
         if(MainModel.fullArray != null){
             if(type == 3 && !MainModel.log_loaded)
                 activity.runInBackground(activity::loadLog);

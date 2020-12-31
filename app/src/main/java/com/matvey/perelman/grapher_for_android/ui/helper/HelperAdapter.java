@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.matvey.perelman.grapher_for_android.R;
 
 public class HelperAdapter extends RecyclerView.Adapter<HelperAdapter.HelperHolder> {
-    public String[][] strs;
+    private String[][] strs;
     public HelperAdapter(){
 
     }
-    public void setContent(String[][] strs){
+    public void resetContent(String[][] strs){
         this.strs = strs;
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
@@ -48,7 +49,8 @@ public class HelperAdapter extends RecyclerView.Adapter<HelperAdapter.HelperHold
             content.setText("");
             for(int i = 1; i < arr.length; ++i){
                 content.append(arr[i]);
-                content.append("\n");
+                if(i != arr.length - 1)
+                    content.append("\n");
             }
         }
     }
