@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_grapher"
-        android:name="com.matvey.perelman.grapher_for_android.ui.grapher.GraphicsFragment"
+        android:name="com.mathway.perelman.grapher_for_android.ui.grapher.GraphicsFragment"
         android:label="@string/menu_grapher" >
         <action
             android:id="@+id/action_nav_grapher_to_nav_helper"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_helper"
-        android:name="com.matvey.perelman.grapher_for_android.ui.helper.HelperFragment"
+        android:name="com.mathway.perelman.grapher_for_android.ui.helper.HelperFragment"
         android:label="@string/nav_help"
         tools:layout="@layout/fragment_helper"/>
 

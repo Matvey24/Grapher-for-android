@@ -28,6 +28,8 @@
         android:layout_marginRight="8dp"
         android:text="Content"
         android:textColor="@color/main_color"
+        android:textColorLink="@color/purple_700"
+        android:textIsSelectable="true"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

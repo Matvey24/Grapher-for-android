@@ -32,18 +32,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_resize"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/nav_resize"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="7"
-        app:layout_constraintStart_toEndOf="@+id/btn_timer"
-        app:layout_constraintTop_toBottomOf="@+id/btn_settings" />
-
-    <Button
         android:id="@+id/btn_timer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,5 +43,16 @@
         app:layout_constraintHorizontal_weight="6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_help" />
+
+    <ToggleButton
+        android:id="@+id/btn_resize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textOff="@string/nav_resize"
+        android:textOn="@string/resize_separatly"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="7"
+        app:layout_constraintStart_toEndOf="@+id/btn_timer"
+        app:layout_constraintTop_toBottomOf="@+id/btn_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
