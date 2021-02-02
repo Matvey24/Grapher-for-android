@@ -200,7 +200,6 @@ public class Calculator {
                 updateConstants();
                 calculatorView.update();
                 updater.setState(getString(R.string.updating));
-                updater.dangerState = false;
                 resize.run();
                 updater.setSuccessCalculated();
                 repaint.ask();

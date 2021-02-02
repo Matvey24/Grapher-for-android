@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.matvey.perelman.grapher_for_android",
+  "applicationId": "com.mathway.perelman.grapher_for_android",
   "variantName": "processDebugResources",
   "elements": [
     {

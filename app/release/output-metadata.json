@@ -4,14 +4,14 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.matvey.perelman.grapher_for_android",
+  "applicationId": "com.mathway.perelman.grapher_for_android",
   "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 2,
+      "versionName": "1.1",
       "outputFile": "app-release.apk"
     }
   ]

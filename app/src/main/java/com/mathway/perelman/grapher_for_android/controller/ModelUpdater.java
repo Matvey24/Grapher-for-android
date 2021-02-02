@@ -165,6 +165,8 @@ public class ModelUpdater {
     }
 
     public void startSettings(int id) {
+        if(dangerState)
+            return;
         Graphic g = graphics.get(id);
         main.startSettings(g, elements.get(id));
     }
@@ -372,6 +374,7 @@ public class ModelUpdater {
         main.setState(main.getString(R.string.plus));
         if (now_show_graphics)
             main.showGraphics();
+        dangerState = false;
     }
 
     public void setState(String text) {
@@ -380,6 +383,7 @@ public class ModelUpdater {
 
     public void error(String message) {
         dangerState = true;
+
         setState(message);
     }
 
